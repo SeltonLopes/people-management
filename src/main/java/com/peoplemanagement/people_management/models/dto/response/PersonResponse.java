@@ -1,12 +1,13 @@
-package com.peoplemanagement.people_management.models.dto.request;
+package com.peoplemanagement.people_management.models.dto.response;
 
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
-public class PersonRequest {
+public class PersonResponse {
 
+    private Long id;
     private String name;
     private String email;
     private LocalDate birthday;
