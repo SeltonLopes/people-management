@@ -5,10 +5,14 @@ import com.peoplemanagement.people_management.models.dto.response.PersonResponse
 import com.peoplemanagement.people_management.models.entity.Person;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface PersonMapper {
 
     Person toPerson(PersonRequest personRequest);
 
     PersonResponse toPersonResponse(Person person);
+
+    List<PersonResponse> toListPersonResponse(List<Person> people);
 }

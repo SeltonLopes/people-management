@@ -8,6 +8,8 @@ import com.peoplemanagement.people_management.repository.PersonRepository;
 import com.peoplemanagement.people_management.service.PersonService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PersonServiceImpl implements PersonService {
 
@@ -24,6 +26,18 @@ public class PersonServiceImpl implements PersonService {
     public PersonResponse registerPerson(PersonRequest personRequest){
         Person person = personMapper.toPerson(personRequest);
         personRepository.save(person);
+        return personMapper.toPersonResponse(person);
+    }
+
+    @Override
+    public List<PersonResponse> getAllPeople(){
+        List<Person> people = personRepository.findAll();
+        return personMapper.toListPersonResponse(people);
+    }
+
+    @Override
+    public PersonResponse getPersonById(Long id){
+        Person person = personRepository.findPersonById(id);
         return personMapper.toPersonResponse(person);
     }
 }
