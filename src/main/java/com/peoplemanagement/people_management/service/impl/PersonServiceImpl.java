@@ -29,6 +29,14 @@ public class PersonServiceImpl implements PersonService {
         return personMapper.toPersonResponse(person);
     }
 
+//    public String existingEmail(String email){
+//        Optional<Person> person = personRepository.findPersonByEmail(email);
+//        if (person.isPresent()){
+//            return "Email ja existente!";
+//        }
+//        return "ok";
+//    }
+
     @Override
     public List<PersonResponse> getAllPeople(){
         List<Person> people = personRepository.findAll();
@@ -37,7 +45,29 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonResponse getPersonById(Long id){
+        return personMapper.toPersonResponse(validatePerson(id));
+    }
+
+    public Person validatePerson(Long id){
+        return personRepository.findPersonById(id);
+    }
+
+    @Override
+    public PersonResponse updatePerson(Long id, PersonRequest personRequest){
+        Person person = validatePerson(id);
+        person.setName(personRequest.getName());
+        person.setEmail(personRequest.getEmail());
+        person.setBirthday(personRequest.getBirthday());
+        return personMapper.toPersonResponse(personRepository.save(person));
+    }
+
+    @Override
+    public String deletePerson(Long id){
         Person person = personRepository.findPersonById(id);
-        return personMapper.toPersonResponse(person);
+        if(person != null){
+            personRepository.delete(person);
+            return "O usuário " + person.getName() + " foi removido com sucesso!";
+        }
+        return "O usuário com o id: " + id + ", não encontrado! ";
     }
 }

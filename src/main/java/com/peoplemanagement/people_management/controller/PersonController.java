@@ -36,4 +36,15 @@ public class PersonController {
     public ResponseEntity<PersonResponse> getPersonById(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(personService.getPersonById(id));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PersonResponse> updatePerson(@PathVariable Long id,
+                                                       @RequestBody @Valid PersonRequest personRequest){
+        return ResponseEntity.status(HttpStatus.OK).body(personService.updatePerson(id, personRequest));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePerson(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(personService.deletePerson(id));
+    }
 }
