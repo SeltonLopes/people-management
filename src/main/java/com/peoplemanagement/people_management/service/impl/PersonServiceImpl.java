@@ -1,5 +1,7 @@
 package com.peoplemanagement.people_management.service.impl;
 
+import com.peoplemanagement.people_management.exception.person.PersonNotFoundException;
+import com.peoplemanagement.people_management.exception.person.PersonPresentException;
 import com.peoplemanagement.people_management.models.dto.request.PersonRequest;
 import com.peoplemanagement.people_management.models.dto.response.PersonResponse;
 import com.peoplemanagement.people_management.models.entity.Person;
@@ -24,18 +26,17 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonResponse registerPerson(PersonRequest personRequest){
+        existingEmail(personRequest.getEmail());
         Person person = personMapper.toPerson(personRequest);
         personRepository.save(person);
         return personMapper.toPersonResponse(person);
     }
 
-//    public String existingEmail(String email){
-//        Optional<Person> person = personRepository.findPersonByEmail(email);
-//        if (person.isPresent()){
-//            return "Email ja existente!";
-//        }
-//        return "ok";
-//    }
+    public void existingEmail(String email){
+        personRepository.findPersonByEmail(email).ifPresent(people -> {
+            throw new PersonPresentException();
+        });
+    }
 
     @Override
     public List<PersonResponse> getAllPeople(){
@@ -44,17 +45,18 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public PersonResponse getPersonById(Long id){
-        return personMapper.toPersonResponse(validatePerson(id));
+    public PersonResponse getPersonById(Long idPerson){
+        return personMapper.toPersonResponse(validatePerson(idPerson));
     }
 
-    public Person validatePerson(Long id){
-        return personRepository.findPersonById(id);
+    public Person validatePerson(Long idPerson){
+        return personRepository.findById(idPerson).orElseThrow(PersonNotFoundException::new);
     }
 
     @Override
-    public PersonResponse updatePerson(Long id, PersonRequest personRequest){
-        Person person = validatePerson(id);
+    public PersonResponse updatePerson(Long idPerson, PersonRequest personRequest){
+        existingEmail(personRequest.getEmail());
+        Person person = validatePerson(idPerson);
         person.setName(personRequest.getName());
         person.setEmail(personRequest.getEmail());
         person.setBirthday(personRequest.getBirthday());
@@ -62,12 +64,12 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public String deletePerson(Long id){
-        Person person = personRepository.findPersonById(id);
+    public String deletePerson(Long idPerson){
+        Person person = validatePerson(idPerson);
         if(person != null){
             personRepository.delete(person);
             return "O usuário " + person.getName() + " foi removido com sucesso!";
         }
-        return "O usuário com o id: " + id + ", não encontrado! ";
+        return "O usuário com o id: " + idPerson + ", não encontrado! ";
     }
 }

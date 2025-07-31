@@ -11,9 +11,9 @@ public interface PersonService {
 
     List<PersonResponse> getAllPeople();
 
-    PersonResponse getPersonById(Long id);
+    PersonResponse getPersonById(Long idPerson);
 
-    PersonResponse updatePerson(Long id, PersonRequest personRequest);
+    PersonResponse updatePerson(Long idPerson, PersonRequest personRequest);
 
-    String deletePerson(Long id);
+    String deletePerson(Long idPerson);
 }

@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,19 +31,19 @@ public class PersonController {
         return ResponseEntity.status(HttpStatus.OK).body(personService.getAllPeople());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PersonResponse> getPersonById(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.OK).body(personService.getPersonById(id));
+    @GetMapping("/{idPerson}")
+    public ResponseEntity<PersonResponse> getPersonById(@PathVariable Long idPerson){
+        return ResponseEntity.status(HttpStatus.OK).body(personService.getPersonById(idPerson));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<PersonResponse> updatePerson(@PathVariable Long id,
+    @PutMapping("/{idPerson}")
+    public ResponseEntity<PersonResponse> updatePerson(@PathVariable Long idPerson,
                                                        @RequestBody @Valid PersonRequest personRequest){
-        return ResponseEntity.status(HttpStatus.OK).body(personService.updatePerson(id, personRequest));
+        return ResponseEntity.status(HttpStatus.OK).body(personService.updatePerson(idPerson, personRequest));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePerson(@PathVariable Long id){
-        return ResponseEntity.status(HttpStatus.OK).body(personService.deletePerson(id));
+    public ResponseEntity<String> deletePerson(@PathVariable Long idPerson){
+        return ResponseEntity.status(HttpStatus.OK).body(personService.deletePerson(idPerson));
     }
 }
